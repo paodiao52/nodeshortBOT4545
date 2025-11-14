@@ -4,40 +4,40 @@ from telegram.ext import (
     ApplicationBuilder,
     ContextTypes,
     ChatMemberHandler,
-    CommandHandler,
+    CommandHandler
 )
 
 GROUP_ID = -1000000000000
 
 async def cmd_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(f"当前群组 ID：{update.effective_chat.id}")
+    chat_id = update.effective_chat.id
+    await update.message.reply_text(f"当前群组 ID：{chat_id}")
 
 async def on_user_join(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        member = update.chat_member
-        if member.new_chat_member.status == "member":
-            user = member.new_chat_member.user
-            name = user.full_name
+    member = update.chat_member
+    if member.new_chat_member.status == "member":
+        user = member.new_chat_member.user
+        name = user.full_name
 
-            keyboard = [
-                [InlineKeyboardButton("🌐 官方网址", url="https://www.nodeshort.com")],
-                [
-                    InlineKeyboardButton("📞 客服帮助", url="https://t.me/NodeShort001"),
-                    InlineKeyboardButton("🎧 活动客服", url="https://t.me/NodeShort006"),
-                ],
-                [InlineKeyboardButton("🤝 招商客服", url="https://t.me/NodeShort009")],
-            ]
+        keyboard = [
+            [InlineKeyboardButton("🌐 官方网址", url="https://www.nodeshort.com")],
+            [
+                InlineKeyboardButton("📞 客服帮助", url="https://t.me/NodeShort001"),
+                InlineKeyboardButton("🎧 活动客服", url="https://t.me/NodeShort006"),
+            ],
+            [
+                InlineKeyboardButton("🤝 招商客服", url="https://t.me/NodeShort009"),
+            ],
+        ]
 
-            text = f"欢迎 **{name}** 来到 NodeShort 🎉"
+        text = f"欢迎 **{name}** 来到 *NodeShort!* 🎉"
 
-            await context.bot.send_message(
-                chat_id=GROUP_ID,
-                text=text,
-                parse_mode="Markdown",
-                reply_markup=InlineKeyboardMarkup(keyboard),
-            )
-    except Exception as e:
-        print("JOIN ERROR:", e)
+        await context.bot.send_message(
+            chat_id=GROUP_ID,
+            text=text,
+            parse_mode="Markdown",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+        )
 
 async def main():
     TOKEN = os.getenv("BOT_TOKEN")
